@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b13">
+  <meta name="description" content="NEON REQUIEM: ひとつの人生を生き、死後に記録を継ぐサイバーパンク人生ローグライク。">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <title>NEON REQUIEM</title>
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="wordmark" href="./" aria-label="NEON REQUIEM ホーム"><span class="mark">N/R</span><span>NEON <b>REQUIEM</b></span></a>
+    <button id="soundToggle" class="icon-button" aria-label="演出設定" title="演出設定">☷</button>
+  </header>
+  <main id="app" class="shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="live-dot"></span> LIFE SIMULATION SYSTEM / 0.1</div>
+      <h1>生きろ。<em>そして、残せ。</em></h1>
+      <p class="intro">人生は自動で進む。取り返しのつかない瞬間だけ、あなたが選ぶ。</p>
+    </section>
+
+    <section id="startScreen" class="panel start-panel">
+      <div class="panel-kicker">BOOT SEQUENCE</div>
+      <h2>新しい人生を起動する</h2>
+      <p>都市はあなたを知らない。まだ。</p>
+      <label class="field-label" for="nameInput">名前 / IDENTITY</label>
+      <input id="nameInput" maxlength="18" placeholder="名無しの市民" autocomplete="nickname">
+      <div class="origin-grid">
+        <button class="origin-card selected" data-origin="slum"><span>01</span><b>下層区育ち</b><small>技術 +8 · 資金 +20</small></button>
+        <button class="origin-card" data-origin="corp"><span>02</span><b>企業区育ち</b><small>知性 +8 · 監視 +10</small></button>
+        <button class="origin-card" data-origin="clinic"><span>03</span><b>研究施設出身</b><small>義体適性 +8 · 人間性 -3</small></button>
+      </div>
+      <button id="startButton" class="primary-button">人生を開始する <span>↗</span></button>
+      <p class="fine-print">データはこのブラウザ内に保存されます。試作版では端末間同期は未対応です。</p>
+    </section>
+
+    <section id="gameScreen" hidden>
+      <section class="status-panel panel">
+        <div class="identity-row">
+          <div><div class="panel-kicker">CURRENT LIFE <span id="runNumber">#001</span></div><h2 id="characterName">市民</h2><p id="characterBio" class="muted">下層区育ち · 無所属</p></div>
+          <div class="age-badge"><strong id="ageValue">18</strong><span>歳</span><small id="dateValue">YEAR 01 / M01</small></div>
+        </div>
+        <div class="meter-list">
+          <div class="meter"><div><span>生命</span><b id="healthText">100 / 100</b></div><div class="meter-track"><i id="healthBar" class="health" style="width:100%"></i></div></div>
+          <div class="meter"><div><span>精神負荷</span><b id="stressText">12 / 100</b></div><div class="meter-track"><i id="stressBar" class="stress" style="width:12%"></i></div></div>
+          <div class="meter"><div><span>人間性</span><b id="humanityText">80 / 100</b></div><div class="meter-track"><i id="humanityBar" class="humanity" style="width:80%"></i></div></div>
+        </div>
+        <div class="stat-chips"><span>◈ ₡ <b id="creditsValue">120</b></span><span>⌁ 技術 <b id="techValue">35</b></span><span>◇ 知性 <b id="intValue">35</b></span><span>⟁ 残響 <b id="echoValue">0</b></span></div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel action-panel">
+          <div class="section-heading"><div><div class="panel-kicker">YOUR NEXT MOVE</div><h2>行動を選ぶ</h2></div><span class="tiny-tag">時間が進む</span></div>
+          <div class="action-grid">
+            <button class="action-card" data-action="work"><span class="action-icon">₡</span><b>働く</b><small>収入を得る · 疲労</small></button>
+            <button class="action-card" data-action="explore"><span class="action-icon">⌖</span><b>探索する</b><small>装備・事件・危険</small></button>
+            <button class="action-card" data-action="talk"><span class="action-icon">♡</span><b>ナオに会う</b><small>関係を深める</small></button>
+            <button class="action-card" data-action="rest"><span class="action-icon">☾</span><b>休息する</b><small>回復する · 出費</small></button>
+          </div>
+          <div class="time-controls"><button id="advanceButton" class="secondary-button">1か月進める <span>→</span></button><button id="autoButton" class="text-button">6か月まとめて ›</button></div>
+        </div>
+        <div class="panel people-panel">
+          <div class="panel-kicker">PERSONAL CONNECTION</div><h2>ナオ・ミナセ</h2>
+          <p class="person-role">元同僚 / 義体技師</p>
+          <div class="relationship-meter"><div><span>信頼</span><b id="trustValue">20</b></div><div class="meter-track"><i id="trustBar" style="width:20%"></i></div></div>
+          <div class="relationship-meter"><div><span>親密さ</span><b id="affectionValue">15</b></div><div class="meter-track"><i id="affectionBar" style="width:15%"></i></div></div>
+          <p id="personNote" class="person-note">「いつか、この街を出よう」ナオはその約束を覚えている。</p>
+        </div>
+      </section>
+
+      <section id="eventPanel" class="panel event-panel" hidden aria-live="polite">
+        <div class="event-top"><span class="event-label">◆ 重大イベント</span><span id="eventTag" class="tiny-tag">DECISION REQUIRED</span></div>
+        <h2 id="eventTitle"></h2><p id="eventText"></p><div id="eventChoices" class="choice-list"></div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="section-heading"><div><div class="panel-kicker">MEMORY FRAGMENTS</div><h2>人生の記録</h2></div><span id="logCount" class="tiny-tag">0 FRAGMENTS</span></div>
+        <ol id="lifeLog" class="life-log"></ol>
+      </section>
+      <button id="resetButton" class="danger-link">この人生を消去する</button>
+    </section>
+
+    <section id="deathScreen" class="panel death-panel" hidden>
+      <div class="panel-kicker">LIFE RECORD SEALED</div><div class="death-symbol">†</div><h2>人生が終わった。</h2><p id="deathSummary"></p>
+      <div class="record-card"><span>今回の残響</span><strong id="earnedEcho">+0</strong><small id="deathCause">記録は保存されました。</small></div>
+      <h3>死後の選択</h3><p class="muted">装備と財産は失われる。記録と、選び抜いた残響だけが次の人生へ向かう。</p>
+      <div id="giftChoices" class="gift-list"></div>
+      <button id="ascendButton" class="primary-button">残響を携えて、再起動する <span>↗</span></button>
+    </section>
+    <footer class="footer"><span>NEON REQUIEM</span><span>NO LIFE IS REPEATED.</span><button id="saveExportButton" class="footer-button">記録を書き出す</button></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
