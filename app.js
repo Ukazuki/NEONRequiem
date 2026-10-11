@@ -41,7 +41,7 @@
     ]}
   };
   function clamp(n,min=0,max=100){return Math.max(min,Math.min(max,n));}
-  function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({meta:state.meta,run:state.run,log:state.log,pendingEvent:state.pendingEvent}));}catch(e){toast("保存できません。ブラウザの空き容量を確認してください。");}}
+  function save(){try{const payload={meta:state.meta,run:state.run?{...state.run,flags:[...state.run.flags]}:null,log:state.log,pendingEvent:state.pendingEvent};localStorage.setItem(SAVE_KEY,JSON.stringify(payload));}catch(e){toast("保存できません。ブラウザの空き容量を確認してください。");}}
   function load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return false;const d=JSON.parse(raw);if(!d||!d.meta)return false;state.meta=d.meta;state.run=d.run;state.log=d.log||[];state.pendingEvent=d.pendingEvent||null;return true;}catch(e){return false;}}
   function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");window.clearTimeout(toast.timer);toast.timer=window.setTimeout(()=>el.classList.remove("show"),2400);}
   function log(text){const r=state.run;if(!r)return;state.log.unshift({month:r.month,text});state.log=state.log.slice(0,30);renderLog();save();}
